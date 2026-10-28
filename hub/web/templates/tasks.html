@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Задачи · Хаб{% endblock %}
+{% block heading %}Задачи{% endblock %}
+{% block content %}
+{% set menu = view.menu %}
+{% set sec_q = '&s=' ~ view.section_id if view.section_id else '' %}
+<p class="-mt-3 text-base-content/70">{{ view.total }} открытых</p>
+
+<form class="flex gap-2" hx-post="/entries" hx-target="#groups" hx-swap="innerHTML" data-reset>
+  <input type="hidden" name="f" value="{{ view.f }}">
+  <input type="hidden" name="s" value="{{ view.section_id or '' }}">
+  <label class="sr-only" for="entry-text">Новая запись</label>
+  <input id="entry-text" name="text" required autocomplete="off" placeholder="Новая запись: что нужно сделать?"
+         class="input input-bordered flex-1 min-h-11">
+  <button class="btn btn-primary min-h-11" type="submit">Добавить</button>
+</form>
+
+<nav class="flex gap-2 overflow-x-auto" aria-label="Фильтр">
+  {% for key, label in filters.items() %}
+  <a href="/tasks?f={{ key }}{{ sec_q }}" class="btn min-h-11 {% if view.f == key %}btn-primary{% else %}btn-ghost border border-base-300{% endif %}" {% if view.f == key %}aria-current="true"{% endif %}>{{ label }}</a>
+  {% endfor %}
+</nav>
+
+{% if view.chips %}
+<nav class="flex gap-2 overflow-x-auto" aria-label="Разделы">
+  <a href="/tasks?f={{ view.f }}" class="btn btn-sm min-h-11 {% if not view.section_id %}btn-neutral{% else %}btn-ghost border border-base-300{% endif %}">Все разделы</a>
+  {% for sec, n in view.chips %}
+  <a href="/tasks?f={{ view.f }}&s={{ sec.id }}" class="btn btn-sm min-h-11 {% if view.section_id == sec.id %}btn-neutral{% else %}btn-ghost border border-base-300{% endif %}">{{ sec.name }} <span class="badge badge-sm">{{ n }}</span></a>
+  {% endfor %}
+</nav>
+{% endif %}
+
+<div id="groups" class="flex flex-col gap-4">
+  {% include "partials/task_groups.html" %}
+</div>
+<div id="toast" class="toast toast-top toast-center z-20"></div>
+{% endblock %}

@@ -1,0 +1,11 @@
+.env
+*.db
+*.sqlite
+__pycache__/
+.venv/
+.pytest_cache/
+.superpowers/
+/.tools/
+/styles/daisyui*.mjs
+hub/web/static/app.css
+hub/web/static/htmx.min.js

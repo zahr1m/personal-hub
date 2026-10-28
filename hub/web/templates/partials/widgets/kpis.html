@@ -1,0 +1,24 @@
+{% set tile = "flex flex-col gap-1 p-4 bg-base-100 border border-base-300 rounded-box hover:border-primary" %}
+{% set label = "text-xs font-semibold uppercase tracking-wider text-base-content/70" %}
+{% set n = events %}
+{% set events_word = "событие" if n % 10 == 1 and n % 100 != 11 else ("события" if n % 10 in (2, 3, 4) and n % 100 not in (12, 13, 14) else "событий") %}
+<a href="/tasks" class="{{ tile }}">
+  <span class="{{ label }}">Просрочено</span>
+  <span class="text-3xl font-semibold tracking-tight {% if overdue %}text-error{% endif %}">{{ overdue | length }}</span>
+  <span class="text-xs text-base-content/70 truncate">{{ overdue[0].title if overdue else "Всё в срок" }}</span>
+</a>
+<a href="/tasks" class="{{ tile }}">
+  <span class="{{ label }}">На сегодня</span>
+  <span class="text-3xl font-semibold tracking-tight">{{ today | length }}</span>
+  <span class="text-xs text-base-content/70">и {{ n }} {{ events_word }}</span>
+</a>
+<a href="/mail" class="{{ tile }}">
+  <span class="{{ label }}">Почта</span>
+  <span class="text-3xl font-semibold tracking-tight text-base-content/50">—</span>
+  <span class="text-xs text-base-content/70">скоро</span>
+</a>
+<a href="/tasks" class="{{ tile }}">
+  <span class="{{ label }}">Проекты</span>
+  <span class="text-3xl font-semibold tracking-tight">{{ projects }}</span>
+  <span class="text-xs text-base-content/70">{{ done }} из {{ total }} подзадач</span>
+</a>

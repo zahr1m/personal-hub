@@ -1,0 +1,26 @@
+<section id="connections-block" class="flex flex-col gap-2">
+  <h2 class="px-1 text-xs font-semibold uppercase tracking-wider text-base-content/70">Подключения</h2>
+  <div class="bg-base-100 border border-base-300 rounded-box">
+    {% for c in view.connections %}{% include "partials/connection_row.html" %}{% else %}
+    <p class="p-3 text-base-content/70">Календарей пока нет</p>
+    {% endfor %}
+  </div>
+
+  <form class="flex flex-col gap-2 p-3 bg-base-100 border border-base-300 rounded-box"
+        hx-post="/connections" hx-target="#connections-block" hx-swap="outerHTML">
+    <h3 class="font-semibold">Добавить календарь</h3>
+    {% if error %}<div class="alert alert-error" role="alert"><span>{{ error }}</span></div>{% endif %}
+    <label class="sr-only" for="cal-name">Название</label>
+    <input id="cal-name" name="name" required maxlength="60" value="{{ name }}" placeholder="Название, например «Рабочий»"
+           class="input input-bordered w-full min-h-11">
+    <label class="sr-only" for="cal-url">Секретная ссылка</label>
+    <input id="cal-url" name="url" type="url" required autocomplete="off" placeholder="Секретная ссылка iCal (https://…)"
+           class="input input-bordered w-full min-h-11">
+    <p class="text-xs text-base-content/70">
+      Google: Настройки календаря → «Интеграция календаря» → «Секретный адрес в формате iCal».
+      Яндекс: Настройки → «Календари» → «Экспорт» → ссылка на iCal.
+      Ссылка хранится зашифрованной и нигде не показывается.
+    </p>
+    <button class="btn btn-primary min-h-11" type="submit">Добавить</button>
+  </form>
+</section>

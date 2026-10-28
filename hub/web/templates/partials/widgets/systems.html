@@ -1,0 +1,17 @@
+<div class="flex items-baseline justify-between gap-2">
+  <h2 class="text-xs font-semibold uppercase tracking-wider text-base-content/70">Системы</h2>
+  <a href="/settings" class="link link-secondary no-underline text-xs">Настройки</a>
+</div>
+<div class="flex items-center gap-3 min-h-8">
+  <span class="size-2 shrink-0 rounded-full bg-success" aria-hidden="true"></span>
+  <span class="flex-1">Бот</span>
+  <span class="text-xs text-base-content/70">работает</span>
+</div>
+{% for c in conns %}
+{% set dot = {"success": "bg-success", "error": "bg-error", "warning": "bg-warning", "neutral": "bg-base-300"}[c.dot] %}
+<div class="flex items-center gap-3 min-h-8">
+  <span class="size-2 shrink-0 rounded-full {{ dot }}" aria-hidden="true"></span>
+  <span class="flex-1 min-w-0 break-words">{{ c.name }}</span>
+  <span class="text-xs break-words text-right {{ "text-error" if c.dot == "error" else "text-base-content/70" }}">{{ c.text }}</span>
+</div>
+{% endfor %}

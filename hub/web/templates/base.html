@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ru" data-theme="hub-light">
+<head>
+  {% include "_head.html" %}
+  <title>{% block title %}Хаб{% endblock %}</title>
+</head>
+<body class="bg-base-200 text-base-content font-sans text-sm">
+  {% set tabs = [
+    ("today", "/", "Главная", "M3 10.5L12 4l9 6.5V20a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1z"),
+    ("tasks", "/tasks", "Задачи", "M9 11l3 3 8-8M4 12v7a1 1 0 001 1h14"),
+    ("calendar", "/calendar", "Календарь", "M4 6h16v14H4zM4 10h16M9 3v4M15 3v4"),
+    ("mail", "/mail", "Почта", "M3 6h18v12H3zM3 7l9 6 9-6"),
+    ("docs", "/docs", "Документы", "M7 3h8l4 4v14H7zM14 3v5h5"),
+  ] %}
+  <div class="min-h-dvh lg:flex">
+    <aside class="hidden lg:flex lg:flex-col lg:w-60 lg:shrink-0 lg:sticky lg:top-0 lg:h-dvh bg-base-100 border-r border-base-300 p-3 gap-1">
+      <div class="px-3 py-4 text-xl font-semibold tracking-tight">Хаб</div>
+      <ul class="menu w-full gap-1 p-0">
+        {% for key, href, label, icon in tabs %}
+        <li><a href="{{ href }}" class="min-h-11 {% if tab == key %}menu-active{% endif %}" {% if tab == key %}aria-current="page"{% endif %}>
+          <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ icon }}"/></svg>
+          {{ label }}</a></li>
+        {% endfor %}
+      </ul>
+      <a href="/settings" class="btn btn-ghost justify-start min-h-11 mt-auto {% if tab == 'settings' %}btn-active{% endif %}">Настройки</a>
+    </aside>
+
+    <div class="flex-1 min-w-0 flex flex-col">
+      <header class="flex items-center gap-3 px-4 pt-5 pb-2 lg:px-8">
+        {% if back %}
+        <a href="{{ back }}" class="btn btn-ghost btn-square -ml-2 size-11" aria-label="Назад">
+          <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+        </a>
+        {% endif %}
+        <h1 class="flex-1 text-2xl font-semibold tracking-tight">{% block heading %}{% endblock %}</h1>
+        <span class="htmx-indicator loading loading-spinner loading-sm" aria-hidden="true"></span>
+        <a href="/settings" class="btn btn-ghost btn-square size-11 lg:hidden" aria-label="Настройки">
+          <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>
+        </a>
+      </header>
+
+      <main id="main" class="flex-1 px-4 pb-24 lg:px-8 lg:pb-8 flex flex-col gap-4"{% if back %} data-back="{{ back }}"{% endif %}>
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+  </div>
+
+  <nav class="dock lg:hidden bg-base-100 border-t border-base-300" aria-label="Разделы">
+    {% for key, href, label, icon in tabs %}
+    <a href="{{ href }}" class="min-h-11 {% if tab == key %}dock-active{% endif %}" {% if tab == key %}aria-current="page"{% endif %}>
+      <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ icon }}"/></svg>
+      <span class="dock-label">{{ label }}</span>
+    </a>
+    {% endfor %}
+  </nav>
+</body>
+</html>

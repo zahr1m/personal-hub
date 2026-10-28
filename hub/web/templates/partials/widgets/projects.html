@@ -1,0 +1,15 @@
+<div class="flex items-baseline justify-between gap-2">
+  <h2 class="text-xs font-semibold uppercase tracking-wider text-base-content/70">Проекты</h2>
+  <a href="/tasks" class="link link-secondary no-underline text-xs">все</a>
+</div>
+{% for p, done, total in items %}
+<div class="flex flex-col gap-1">
+  <div class="flex justify-between gap-2">
+    <span class="min-w-0 break-words">{{ p.title }}</span>
+    <span class="shrink-0 text-xs text-base-content/70">{{ done }} из {{ total }}</span>
+  </div>
+  <progress class="progress progress-primary h-1" value="{{ done }}" max="{{ total if total else 1 }}" aria-label="Прогресс проекта «{{ p.title }}»"></progress>
+</div>
+{% else %}
+<p class="text-base-content/70">Открытых проектов нет</p>
+{% endfor %}

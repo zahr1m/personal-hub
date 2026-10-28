@@ -1,0 +1,70 @@
+{% set e = row.entry %}
+{% set is_open = e.status == 'open' %}
+<div id="entry-{{ e.id }}" class="flex items-center gap-1 px-2 py-1 border-b border-base-300 last:border-b-0">
+  <button type="button" class="btn btn-ghost btn-circle size-11 min-h-11 shrink-0"
+          hx-post="/entries/{{ e.id }}/{{ 'done' if is_open else 'reopen' }}"
+          hx-target="#entry-{{ e.id }}" hx-swap="outerHTML"
+          aria-label="{{ 'Выполнено' if is_open else 'Вернуть в работу' }}">
+    {% if is_open %}
+    <svg class="size-6 text-base-content/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/></svg>
+    {% else %}
+    <svg class="size-6 text-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/></svg>
+    {% endif %}
+  </button>
+
+  <div class="flex-1 min-w-0 py-1">
+    <div class="font-medium break-words {% if not is_open %}line-through text-base-content/60{% endif %}">{{ e.title }}</div>
+    <div class="flex flex-wrap items-center gap-x-2 text-xs text-base-content/70">
+      {% if row.section %}<span data-section="{{ row.section }}">{{ row.section }}</span>{% endif %}
+      {% if row.shared %}
+      <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Общая"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM22 21v-2a4 4 0 00-3-3.9M16 3.1a4 4 0 010 7.8"/></svg>
+      {% endif %}
+      {% if row.progress %}<span>{{ row.progress[0] }} из {{ row.progress[1] }}</span>{% endif %}
+      {% if not is_open %}<span>{{ 'отменено' if e.status == 'dropped' else 'выполнено' }}</span>{% endif %}
+    </div>
+    {% if row.can_create_subtasks %}
+    <button type="button" class="btn btn-sm btn-primary mt-1 min-h-11"
+            hx-post="/entries/{{ e.id }}/subtasks" hx-target="#entry-{{ e.id }}" hx-swap="outerHTML">✅ Создать подзадачи</button>
+    {% endif %}
+  </div>
+
+  {% if row.badge and is_open %}
+  {% set tone = {'error': 'badge-soft badge-error', 'warning': 'badge-soft badge-warning', 'neutral': 'badge-soft'}[row.badge[1]] %}
+  <span class="badge {{ tone }} whitespace-nowrap">{{ row.badge[0] }}</span>
+  {% endif %}
+
+  {% if not is_open or row.mine %}
+  <details class="dropdown dropdown-end">
+    <summary class="btn btn-ghost btn-square size-11 min-h-11" aria-label="Действия">
+      <svg class="size-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/></svg>
+    </summary>
+    <ul class="dropdown-content menu bg-base-100 border border-base-300 rounded-box w-60 p-2 z-10 shadow-sm">
+      {% if not is_open %}
+      <li><button type="button" class="min-h-11" hx-post="/entries/{{ e.id }}/reopen" hx-target="#entry-{{ e.id }}" hx-swap="outerHTML">Вернуть в работу</button></li>
+      {% endif %}
+      {% if row.mine %}
+      {% if is_open %}
+      <li><button type="button" class="min-h-11" hx-post="/entries/{{ e.id }}/drop" hx-target="#entry-{{ e.id }}" hx-swap="outerHTML">Отменить</button></li>
+      {% endif %}
+      <li><details><summary class="min-h-11">В раздел…</summary><ul>
+        {% for s in menu.own_sections %}
+        <li><button type="button" class="min-h-11" hx-post="/entries/{{ e.id }}/section/{{ s.id }}" hx-target="#entry-{{ e.id }}" hx-swap="outerHTML">{{ s.name }}</button></li>
+        {% endfor %}
+        <li><button type="button" class="min-h-11" hx-post="/entries/{{ e.id }}/section/0" hx-target="#entry-{{ e.id }}" hx-swap="outerHTML">Без раздела</button></li>
+      </ul></details></li>
+      <li><details><summary class="min-h-11">Поделиться…</summary><ul>
+        {% for u in menu.others %}
+        <li><button type="button" class="min-h-11" hx-post="/entries/{{ e.id }}/share" hx-vals='{"to": "user:{{ u.id }}"}' hx-target="#entry-{{ e.id }}" hx-swap="outerHTML">{{ u.name }}</button></li>
+        {% endfor %}
+        <li><button type="button" class="min-h-11" hx-post="/entries/{{ e.id }}/share" hx-vals='{"to": "space:{{ menu.family_id }}"}' hx-target="#entry-{{ e.id }}" hx-swap="outerHTML">Семья</button></li>
+      </ul></details></li>
+      <li><details><summary class="min-h-11">Тип…</summary><ul>
+        {% for kind, label in [('task', 'Задача'), ('project', 'Проект'), ('think', 'Подумать'), ('note', 'Заметка')] %}
+        <li><button type="button" class="min-h-11 {% if e.kind == kind %}menu-active{% endif %}" hx-post="/entries/{{ e.id }}/kind/{{ kind }}" hx-target="#entry-{{ e.id }}" hx-swap="outerHTML">{{ label }}</button></li>
+        {% endfor %}
+      </ul></details></li>
+      {% endif %}
+    </ul>
+  </details>
+  {% endif %}
+</div>

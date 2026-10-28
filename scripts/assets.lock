@@ -1,0 +1,6 @@
+# имя  url  sha256 ("-" = записать при первой загрузке)
+tailwindcss-linux-x64 https://github.com/tailwindlabs/tailwindcss/releases/download/v4.3.3/tailwindcss-linux-x64 dc61b3ac6b8c9ca874c0cc4c57b2409791a64c5540404ca5f5367360babc313a
+tailwindcss-windows-x64.exe https://github.com/tailwindlabs/tailwindcss/releases/download/v4.3.3/tailwindcss-windows-x64.exe e0e260ce048014e9268f6237ff18f8ccf02cef521cbd0ae04e82c2cdf7aa3955
+daisyui.mjs https://github.com/saadeghi/daisyui/releases/download/v5.7.50/daisyui.mjs d69de07c7463bb1f41548e2688f88ee105cdadf9779fce5b3c47b3bfaa6be472
+daisyui-theme.mjs https://github.com/saadeghi/daisyui/releases/download/v5.7.50/daisyui-theme.mjs e48a35d8326d650181ca600560e8520cf6b44cf9242bbd9d45825607e641f251
+htmx.min.js https://unpkg.com/htmx.org@2.0.11/dist/htmx.min.js d6fdc75f204e6bdefa99b69bf1e6d4ac69b8a364f77929f45c13476b4000f717

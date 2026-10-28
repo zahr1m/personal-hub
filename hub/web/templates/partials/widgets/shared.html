@@ -1,0 +1,9 @@
+<h2 class="text-xs font-semibold uppercase tracking-wider text-base-content/70">{{ title }}</h2>
+{% for e in items %}
+<div class="flex items-center gap-3 min-h-8">
+  <span class="flex-1 min-w-0 break-words">{{ e.title }}</span>
+  {% if e.due_date %}<span class="text-xs text-base-content/70">{{ e.due_date | ddmm }}</span>{% endif %}
+</div>
+{% else %}
+<p class="text-base-content/70">Общего пока нет</p>
+{% endfor %}

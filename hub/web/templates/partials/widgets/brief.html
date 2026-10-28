@@ -1,0 +1,15 @@
+<div class="flex items-baseline justify-between gap-2">
+  <h2 class="text-xs font-semibold uppercase tracking-wider text-base-content/70">Брифинг</h2>
+  {% if not intro %}
+  <button type="button" class="btn btn-sm btn-ghost min-h-11" hx-post="/brief" hx-target="#w-brief" hx-swap="innerHTML">Собрать брифинг</button>
+  {% endif %}
+</div>
+{% if intro %}
+<p class="whitespace-pre-line leading-relaxed">{{ intro }}</p>
+{% elif tried %}
+<p class="text-base-content/70">Модель не ответила. Списки дел и событий — в виджетах ниже.</p>
+{% elif status in ("sent", "raw") %}
+<p class="text-base-content/70">Утренний брифинг сегодня отправлен в Telegram без вступления. Списки — в виджетах ниже.</p>
+{% else %}
+<p class="text-base-content/70">Брифинг на сегодня ещё не собран. Нажмите кнопку, чтобы собрать его сейчас.</p>
+{% endif %}

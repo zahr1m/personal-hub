@@ -1,0 +1,10 @@
+<div class="flex flex-col gap-1 p-3 bg-base-100 border border-base-300 rounded-box">
+  <p class="text-xs text-base-content/70">Приглашение действует 24 часа и работает один раз.</p>
+  {% if link %}
+  <p>Ссылка: <span class="break-all select-all">{{ link }}</span></p>
+  <p class="text-xs text-base-content/70">Или отправь боту: <span class="select-all">/start {{ code }}</span></p>
+  {% else %}
+  <p>Команда: <span class="break-all select-all">/start {{ code }}</span></p>
+  <p class="text-xs text-base-content/70">Новому человеку: отправь боту /start с этим кодом.</p>
+  {% endif %}
+</div>

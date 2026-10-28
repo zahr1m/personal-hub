@@ -1,0 +1,9 @@
+<div class="flex items-baseline justify-between gap-2">
+  <h2 class="text-xs font-semibold uppercase tracking-wider text-base-content/70">Горит</h2>
+  <a href="/tasks" class="link link-secondary no-underline text-xs">все задачи</a>
+</div>
+<div class="-mx-2">
+  {% for row in rows %}{% include "partials/task_row.html" %}{% else %}
+  <p class="px-2 text-base-content/70">Ничего не горит</p>
+  {% endfor %}
+</div>

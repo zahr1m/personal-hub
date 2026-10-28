@@ -1,0 +1,15 @@
+{% set dot = {'success': 'bg-success', 'error': 'bg-error', 'warning': 'bg-warning', 'neutral': 'bg-base-300'}[c.dot] %}
+{% set tone = 'text-error' if c.dot == 'error' else 'text-base-content/70' %}
+<div id="connection-{{ c.id }}" class="flex items-center gap-3 px-3 py-2 border-b border-base-300 last:border-b-0">
+  <span class="size-2 shrink-0 rounded-full {{ dot }}" aria-hidden="true"></span>
+  <div class="flex-1 min-w-0">
+    <div class="font-medium break-words">{{ c.name }} <span class="text-xs font-normal text-base-content/70">{{ c.hint }} ●●●●</span></div>
+    <div class="text-xs break-words {{ tone }}">{{ c.text }}</div>
+  </div>
+  {% if c.active %}
+  <button type="button" class="btn btn-sm min-h-11" hx-post="/connections/{{ c.id }}/check"
+          hx-target="#connection-{{ c.id }}" hx-swap="outerHTML">Проверить</button>
+  <button type="button" class="btn btn-sm btn-ghost min-h-11" hx-post="/connections/{{ c.id }}/disable"
+          hx-target="#connection-{{ c.id }}" hx-swap="outerHTML" hx-confirm="Отключить календарь «{{ c.name }}»?">Отключить</button>
+  {% endif %}
+</div>

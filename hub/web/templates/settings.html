@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Настройки · Хаб{% endblock %}
+{% block heading %}Настройки{% endblock %}
+{% block content %}
+<div class="flex items-center gap-3 p-3 bg-base-100 border border-base-300 rounded-box">
+  <div class="size-10 shrink-0 rounded-lg bg-primary text-primary-content flex items-center justify-center font-bold" aria-hidden="true">{{ user.name[:1] }}</div>
+  <div class="flex flex-col">
+    <div class="font-semibold">{{ user.name }}</div>
+    <div class="text-xs text-base-content/70">{{ 'Администратор' if user.role == 'admin' else 'Пользователь' }}</div>
+  </div>
+</div>
+
+{% include "partials/connections_block.html" %}
+
+<section class="flex flex-col gap-2">
+  <h2 class="px-1 text-xs font-semibold uppercase tracking-wider text-base-content/70">Брифинг</h2>
+  {% include "partials/brief_time.html" %}
+</section>
+
+<section class="flex flex-col gap-2">
+  <h2 class="px-1 text-xs font-semibold uppercase tracking-wider text-base-content/70">Расход модели · сегодня</h2>
+  <div class="flex flex-col gap-3 p-3 bg-base-100 border border-base-300 rounded-box">
+    {% for u in view.usage %}
+    <div class="flex flex-col gap-1">
+      <div class="flex justify-between gap-2 tabular-nums">
+        <span class="font-medium">{{ u.name }}</span>
+        <span class="text-base-content/70">{{ '{:,}'.format(u.tokens_in).replace(',', ' ') }} / {{ '{:,}'.format(u.tokens_out).replace(',', ' ') }}</span>
+      </div>
+      <progress class="progress progress-primary h-1" value="{{ u.pct_in }}" max="100" aria-label="Входные токены, % дневного лимита"></progress>
+      <progress class="progress progress-secondary h-1" value="{{ u.pct_out }}" max="100" aria-label="Выходные токены, % дневного лимита"></progress>
+    </div>
+    {% endfor %}
+    <p class="text-xs text-base-content/70">Вход / выход. Лимит в день: {% if view.limit_in > 0 and view.limit_out > 0 %}{{ '{:,}'.format(view.limit_in).replace(',', ' ') }} / {{ '{:,}'.format(view.limit_out).replace(',', ' ') }}{% else %}лимит не задан{% endif %}</p>
+  </div>
+</section>
+
+<section class="flex flex-col gap-2">
+  <h2 class="px-1 text-xs font-semibold uppercase tracking-wider text-base-content/70">Доступ</h2>
+  <div class="bg-base-100 border border-base-300 rounded-box">
+    <div class="flex items-center justify-between gap-3 min-h-12 px-3 border-b border-base-300">
+      <span>Я открыл другим</span>
+      <span class="text-base-content/70 tabular-nums" data-shared-by-me="{{ view.shared_by_me }}">{{ view.shared_by_me }}</span>
+    </div>
+    <div class="flex items-center justify-between gap-3 min-h-12 px-3">
+      <span>Открыто мне</span>
+      <span class="text-base-content/70 tabular-nums" data-shared-with-me="{{ view.shared_with_me }}">{{ view.shared_with_me }}</span>
+    </div>
+  </div>
+</section>
+
+{% if view.users is not none %}
+<section class="flex flex-col gap-2">
+  <div class="flex items-center justify-between">
+    <h2 class="px-1 text-xs font-semibold uppercase tracking-wider text-base-content/70">Пользователи</h2>
+    <button type="button" class="btn btn-sm min-h-11" hx-post="/invites" hx-target="#invite" hx-swap="innerHTML">Пригласить</button>
+  </div>
+  <div class="bg-base-100 border border-base-300 rounded-box">
+    {% for u in view.users %}
+    <div class="flex items-center justify-between gap-3 min-h-12 px-3 border-b border-base-300 last:border-b-0">
+      <span>{{ u.name }}</span>
+      <span class="text-xs text-base-content/70">{{ 'админ' if u.role == 'admin' else 'пользователь' }} · бриф {{ u.brief_time }}</span>
+    </div>
+    {% endfor %}
+  </div>
+  <div id="invite" aria-live="polite"></div>
+</section>
+{% endif %}
+<div id="toast" class="toast toast-top toast-center z-20"></div>
+{% endblock %}

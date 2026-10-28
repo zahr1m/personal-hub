@@ -1,0 +1,94 @@
+@import "tailwindcss";
+@source "../hub/web/templates";
+@plugin "./daisyui.mjs" {
+  themes: false;
+}
+
+/* Стиль A «Строгий»: токены исследования 27.10, поверх — цвета темы Telegram */
+@plugin "./daisyui-theme.mjs" {
+  name: "hub-light";
+  default: true;
+  color-scheme: light;
+  --color-base-100: var(--tg-theme-section-bg-color, #ffffff);
+  --color-base-200: var(--tg-theme-secondary-bg-color, #f7f7f8);
+  --color-base-300: var(--tg-theme-section-separator-color, #e4e4e9);
+  --color-base-content: var(--tg-theme-text-color, #1a1a1f);
+  --color-primary: var(--tg-theme-button-color, #5b5bd6);
+  --color-primary-content: var(--tg-theme-button-text-color, #ffffff);
+  --color-secondary: var(--tg-theme-link-color, #5b5bd6);
+  --color-secondary-content: #ffffff;
+  --color-accent: #5b5bd6;
+  --color-accent-content: #ffffff;
+  --color-neutral: #1a1a1f;
+  --color-neutral-content: #ededf0;
+  --color-info: #5b5bd6;
+  --color-info-content: #ffffff;
+  --color-success: #1a7f4b;
+  --color-success-content: #ffffff;
+  --color-warning: #93500c;
+  --color-warning-content: #fdf1de;
+  --color-error: #b42318;
+  --color-error-content: #fdecea;
+  --radius-box: 10px;
+  --radius-field: 8px;
+  --radius-selector: 6px;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@plugin "./daisyui-theme.mjs" {
+  name: "hub-dark";
+  prefersdark: true;
+  color-scheme: dark;
+  --color-base-100: var(--tg-theme-section-bg-color, #17171a);
+  --color-base-200: var(--tg-theme-secondary-bg-color, #0e0e10);
+  --color-base-300: var(--tg-theme-section-separator-color, #2a2a30);
+  --color-base-content: var(--tg-theme-text-color, #ededf0);
+  --color-primary: var(--tg-theme-button-color, #8b8bf5);
+  --color-primary-content: var(--tg-theme-button-text-color, #0e0e10);
+  --color-secondary: var(--tg-theme-link-color, #8b8bf5);
+  --color-secondary-content: #0e0e10;
+  --color-accent: #8b8bf5;
+  --color-accent-content: #0e0e10;
+  --color-neutral: #ededf0;
+  --color-neutral-content: #1a1a1f;
+  --color-info: #8b8bf5;
+  --color-info-content: #0e0e10;
+  --color-success: #5fd39a;
+  --color-success-content: #0e0e10;
+  --color-warning: #f5c06b;
+  --color-warning-content: #0e0e10;
+  --color-error: #ff8a8a;
+  --color-error-content: #0e0e10;
+  --radius-box: 10px;
+  --radius-field: 8px;
+  --radius-selector: 6px;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@theme {
+  --font-sans: "Inter", system-ui, sans-serif;
+}
+
+@layer base {
+  body {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* индикатор HTMX: includeIndicatorStyles выключен ради CSP без inline-стилей */
+.htmx-indicator {
+  opacity: 0;
+  transition: opacity 150ms ease-in;
+}
+.htmx-request .htmx-indicator,
+.htmx-request.htmx-indicator {
+  opacity: 1;
+}

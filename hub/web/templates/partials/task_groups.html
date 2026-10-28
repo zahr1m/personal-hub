@@ -1,0 +1,11 @@
+{% for label, rows in view.groups %}
+<section class="flex flex-col gap-1">
+  <h2 class="px-1 text-xs font-semibold uppercase tracking-wider text-base-content/70">{{ label }} · {{ rows | length }}</h2>
+  <div class="card bg-base-100 border border-base-300">
+    {% for row in rows %}{% include "partials/task_row.html" %}{% endfor %}
+  </div>
+</section>
+{% else %}
+<p class="px-1 text-base-content/70">Открытых задач нет</p>
+{% endfor %}
+{% include "partials/toast.html" %}

@@ -1,0 +1,11 @@
+<form id="brief-time" class="flex flex-col gap-2 p-3 bg-base-100 border border-base-300 rounded-box"
+      hx-post="/settings/brief-time" hx-target="#brief-time" hx-swap="outerHTML">
+  {% if error %}<div class="alert alert-error" role="alert"><span>{{ error }}</span></div>{% endif %}
+  <div class="flex items-center justify-between gap-3">
+    <label for="brief-input">Утренняя сводка в</label>
+    <input id="brief-input" name="brief_time" type="time" required min="{{ view.brief_from }}" max="{{ view.brief_to }}"
+           value="{{ view.user.brief_time }}" class="input input-bordered min-h-11 tabular-nums">
+  </div>
+  <p class="text-xs text-base-content/70">От {{ view.brief_from }} до {{ view.brief_to }}, по Москве.</p>
+  <button class="btn min-h-11" type="submit">Сохранить</button>
+</form>
